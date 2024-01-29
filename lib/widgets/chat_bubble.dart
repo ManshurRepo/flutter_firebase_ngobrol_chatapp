@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 import 'avatar.dart';
@@ -20,7 +21,7 @@ class ChatBubble extends StatelessWidget {
     required this.direction,
     required this.message,
     required this.type,
-    required this.photoUrl,
+    this.photoUrl,
   }) : super(key: key);
   final Direction direction;
   final String message;
@@ -41,6 +42,7 @@ class ChatBubble extends StatelessWidget {
           constraints:
               BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.8),
           padding: const EdgeInsets.all(8),
+          margin: const EdgeInsets.symmetric(vertical: 4),
           decoration: BoxDecoration(
             borderRadius: _borderRadius(direction, type),
             color: isOnLeft ? Colors.grey[200] : Theme.of(context).primaryColor,
@@ -52,68 +54,69 @@ class ChatBubble extends StatelessWidget {
               color: isOnLeft ? Colors.black : Colors.white,
             ),
           ),
-        )
+        ),
       ],
     );
   }
-}
 
-Widget _buildLeading(BubbleType type) {
-  if (type == BubbleType.alone || type == BubbleType.bottom) {
-    return const Avatar(
-      radius: 12,
-    );
+  Widget _buildLeading(BubbleType type) {
+    if (type == BubbleType.alone || type == BubbleType.bottom) {
+      return const Avatar(
+        radius: 12,
+      );
+    }
+    return const SizedBox(width: 24);
   }
-  return const SizedBox(width: 24);
-}
 
-BorderRadius _borderRadius(Direction dir, BubbleType type) {
-  const radius1 = Radius.circular(15);
-  const radius2 = Radius.circular(5);
-  switch (type) {
-    case BubbleType.top:
-      return dir == Direction.left
-          ? const BorderRadius.only(
-              topLeft: radius1,
-              topRight: radius1,
-              bottomLeft: radius2,
-              bottomRight: radius1,
-            )
-          : const BorderRadius.only(
-              topLeft: radius1,
-              topRight: radius1,
-              bottomLeft: radius1,
-              bottomRight: radius2,
-            );
+  BorderRadius _borderRadius(Direction dir, BubbleType type) {
+    const radius1 = Radius.circular(15);
+    const radius2 = Radius.circular(5);
+    switch (type) {
+      case BubbleType.top:
+        return dir == Direction.left
+            ? const BorderRadius.only(
+                topLeft: radius1,
+                topRight: radius1,
+                bottomLeft: radius2,
+                bottomRight: radius1,
+              )
+            : const BorderRadius.only(
+                topLeft: radius1,
+                topRight: radius1,
+                bottomLeft: radius1,
+                bottomRight: radius2,
+              );
 
-    case BubbleType.middle:
-      return dir == Direction.left
-          ? const BorderRadius.only(
-              topLeft: radius2,
-              topRight: radius1,
-              bottomLeft: radius2,
-              bottomRight: radius1,
-            )
-          : const BorderRadius.only(
-              topLeft: radius1,
-              topRight: radius2,
-              bottomLeft: radius1,
-              bottomRight: radius2,
-            );
-    case BubbleType.bottom:
-      return dir == Direction.left
-          ? const BorderRadius.only(
-              topLeft: radius2,
-              topRight: radius1,
-              bottomLeft: radius1,
-              bottomRight: radius1)
-          : const BorderRadius.only(
-              topLeft: radius1,
-              topRight: radius2,
-              bottomLeft: radius1,
-              bottomRight: radius1,
-            );
-    case BubbleType.alone:
-      return BorderRadius.circular(15);
+      case BubbleType.middle:
+        return dir == Direction.left
+            ? const BorderRadius.only(
+                topLeft: radius2,
+                topRight: radius1,
+                bottomLeft: radius2,
+                bottomRight: radius1,
+              )
+            : const BorderRadius.only(
+                topLeft: radius1,
+                topRight: radius2,
+                bottomLeft: radius1,
+                bottomRight: radius2,
+              );
+      case BubbleType.bottom:
+        return dir == Direction.left
+            ? const BorderRadius.only(
+                topLeft: radius2,
+                topRight: radius1,
+                bottomLeft: radius1,
+                bottomRight: radius1,
+              )
+            : const BorderRadius.only(
+                topLeft: radius1,
+                topRight: radius2,
+                bottomLeft: radius1,
+                bottomRight: radius1,
+              );
+      case BubbleType.alone:
+        return BorderRadius.circular(15);
+    }
   }
 }

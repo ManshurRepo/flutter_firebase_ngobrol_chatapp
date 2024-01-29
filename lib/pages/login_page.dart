@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'home_page.dart';
@@ -51,13 +52,6 @@ class _LoginPageState extends State<LoginPage> {
                 labelText: 'Email',
               ),
             ),
-            const SizedBox(height: 48.0),
-            TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-              ),
-            ),
             const SizedBox(height: 16.0),
             TextField(
               controller: _passwordController,
@@ -71,11 +65,9 @@ class _LoginPageState extends State<LoginPage> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const HomePage()));
+                  _login();
                 },
-                  child:
-                  const Text('Login'),
+                child: const Text('Login'),
               ),
             ),
             const SizedBox(height: 16.0),
@@ -87,19 +79,43 @@ class _LoginPageState extends State<LoginPage> {
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const RegisterPage()));
-                  }, 
-                  child: const Text('Register', 
-                  style: TextStyle(
-                    color: Colors.black,
-                    backgroundColor: Colors.amber
-                  ),),
+                        builder: (context) => const RegisterPage()));
+                  },
+                  child: const Text(
+                    'Register',
+                    style: TextStyle(
+                        color: Colors.black, backgroundColor: Colors.amber),
                   ),
+                ),
               ],
             ),
           ],
-          ),
+        ),
       ),
     );
   }
+
+  void _login() async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _emailController.text, password: _passwordController.text);
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const HomePage()));
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: const Text('Error'),
+                content: Text(e.toString()),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('OK'))
+                ],
+              ));
+    }
+  }
 }
+
